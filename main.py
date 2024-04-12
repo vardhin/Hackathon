@@ -5,7 +5,7 @@ from PyQt5.QtCore import QTimer
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Flexible UI App")
+        self.setWindowTitle("Standardized Education System: SES")
         self.central_widget = QWidget()  # Central widget to hold layout
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)  # Vertical layout
