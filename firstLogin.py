@@ -20,7 +20,7 @@ class MainWidget(QMainWindow):
 
     def init_ui(self):
         self.setWindowTitle('Screen Changer')
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(100, 100, 500, 800)
 
         self.background = BackgroundWidget("pic.jpg")
         self.label = QLabel("Main Screen")
