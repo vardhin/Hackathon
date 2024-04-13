@@ -1,0 +1,178 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QMenu, QAction, QDialog, QLabel
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt
+
+class TeacherDashboard(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Teacher Dashboard")
+        self.setStyleSheet("background-color: blue;")
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Menu Button
+        menu_button = QPushButton("Menu")
+        menu_button.setFont(QFont("Arial", 16))
+        menu_button.setStyleSheet("background-color: #3498db; color: #ffffff; border-radius: 10px; padding: 15px;")
+        menu_button.setMenu(self.create_menu())
+        layout.addWidget(menu_button, alignment=Qt.AlignBottom | Qt.AlignHCenter)
+
+        # Teaching Button
+        teaching_button = QPushButton("Teacher")
+        teaching_button.setFont(QFont("Arial", 16))
+        teaching_button.setStyleSheet("background-color: #3498db; color: #ffffff; border-radius: 10px; padding: 15px;")
+        teaching_button.clicked.connect(self.open_teaching)
+        layout.addWidget(teaching_button, alignment=Qt.AlignBottom | Qt.AlignHCenter)
+
+        self.setLayout(layout)
+
+    def create_menu(self):
+        menu = QMenu(self)
+
+        # Actions for the menu
+        courses_action = QAction("Courses", self)
+        courses_action.triggered.connect(self.open_courses)
+        menu.addAction(courses_action)
+
+        completed_courses_action = QAction("Completed Courses", self)
+        completed_courses_action.triggered.connect(self.view_completed_courses)
+        menu.addAction(completed_courses_action)
+
+        level_action = QAction("Board Level or Competitive Level", self)
+        level_action.triggered.connect(self.choose_level)
+        menu.addAction(level_action)
+
+        mock_test_action = QAction("Mock Tests", self)
+        mock_test_action.triggered.connect(self.take_mock_tests)
+        menu.addAction(mock_test_action)
+
+        receive_payment_action = QAction("Receive Payment", self)
+        receive_payment_action.triggered.connect(self.receive_payment)
+        menu.addAction(receive_payment_action)
+
+        return menu
+
+    def open_teaching(self):
+        teaching_courses_dialog = QDialog(self)
+        teaching_courses_dialog.setWindowTitle("Teaching Courses")
+        teaching_courses_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display teaching courses
+        teaching_courses_label = QLabel("Teaching Courses:")
+        teaching_courses_dialog_layout = QVBoxLayout()
+        teaching_courses_dialog_layout.addWidget(teaching_courses_label)
+
+        # Example teaching courses list
+        teaching_courses_list = ["Mathematics", "Science", "History", "Literature"]
+        for course in teaching_courses_list:
+            teaching_courses_dialog_layout.addWidget(QLabel(course))
+
+        teaching_courses_dialog.setLayout(teaching_courses_dialog_layout)
+        teaching_courses_dialog.exec_()
+
+    def open_courses(self):
+        courses_dialog = QDialog(self)
+        courses_dialog.setWindowTitle("Courses")
+        courses_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display available courses
+        courses_label = QLabel("Available Courses:")
+        courses_dialog_layout = QVBoxLayout()
+        courses_dialog_layout.addWidget(courses_label)
+
+        # Example courses list
+        courses_list = ["Mathematics", "Science", "History", "Literature", "Computer Science"]
+        for course in courses_list:
+            courses_dialog_layout.addWidget(QLabel(course))
+
+        courses_dialog.setLayout(courses_dialog_layout)
+        courses_dialog.exec_()
+
+    def view_completed_courses(self):
+        completed_dialog = QDialog(self)
+        completed_dialog.setWindowTitle("Completed Courses")
+        completed_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display completed courses
+        completed_label = QLabel("Completed Courses:")
+        completed_dialog_layout = QVBoxLayout()
+        completed_dialog_layout.addWidget(completed_label)
+
+        # Example completed courses list
+        completed_courses_list = ["Mathematics", "Science"]
+        for course in completed_courses_list:
+            completed_dialog_layout.addWidget(QLabel(course))
+
+        completed_dialog.setLayout(completed_dialog_layout)
+        completed_dialog.exec_()
+
+    def choose_level(self):
+        level_dialog = QDialog(self)
+        level_dialog.setWindowTitle("Choose Level")
+        level_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display level options
+        level_label = QLabel("Choose Level:")
+        level_dialog_layout = QVBoxLayout()
+        level_dialog_layout.addWidget(level_label)
+
+        # Example options
+        level_1_button = QPushButton("Level 1")
+        level_2_button = QPushButton("Level 2")
+        level_3_button = QPushButton("Level 3")
+        level_dialog_layout.addWidget(level_1_button)
+        level_dialog_layout.addWidget(level_2_button)
+        level_dialog_layout.addWidget(level_3_button)
+
+        level_dialog.setLayout(level_dialog_layout)
+        level_dialog.exec_()
+
+    def take_mock_tests(self):
+        mock_test_dialog = QDialog(self)
+        mock_test_dialog.setWindowTitle("Mock Tests")
+        mock_test_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display mock test options
+        mock_test_label = QLabel("Choose Mock Test Level:")
+        mock_test_dialog_layout = QVBoxLayout()
+        mock_test_dialog_layout.addWidget(mock_test_label)
+
+        # Example options
+        level_1_button = QPushButton("Level 1")
+        level_2_button = QPushButton("Level 2")
+        level_3_button = QPushButton("Level 3")
+        mock_test_dialog_layout.addWidget(level_1_button)
+        mock_test_dialog_layout.addWidget(level_2_button)
+        mock_test_dialog_layout.addWidget(level_3_button)
+
+        mock_test_dialog.setLayout(mock_test_dialog_layout)
+        mock_test_dialog.exec_()
+
+    def receive_payment(self):
+        payment_dialog = QDialog(self)
+        payment_dialog.setWindowTitle("Receive Payment")
+        payment_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display payment options
+        payment_label = QLabel("Receive Payment:")
+        payment_dialog_layout = QVBoxLayout()
+        payment_dialog_layout.addWidget(payment_label)
+
+        # Example payment methods
+        paypal_button = QPushButton("PayPal")
+        credit_card_button = QPushButton("Credit Card")
+        payment_dialog_layout.addWidget(paypal_button)
+        payment_dialog_layout.addWidget(credit_card_button)
+
+        payment_dialog.setLayout(payment_dialog_layout)
+        payment_dialog.exec_()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = TeacherDashboard()
+    window.show()
+    sys.exit(app.exec_())
