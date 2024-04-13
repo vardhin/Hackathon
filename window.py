@@ -41,6 +41,11 @@ class MyWindow(QMainWindow):
         background_widget = BackgroundWidget(image_path)
         self.setCentralWidget(background_widget)
 
+    def remove_background_image(self):
+        if hasattr(self, 'background_widget'):
+            self.background_widget.setParent(None)
+            del self.background_widget
+            
     def switch_to_page(self, page):
         index = self.stacked_layout.addWidget(page)
         self.stacked_layout.setCurrentIndex(index)
