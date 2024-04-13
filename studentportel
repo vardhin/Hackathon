@@ -1,0 +1,163 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QMenu, QAction, QDialog, QLabel
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt
+
+
+class MainWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Student Dashboard")
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setStyleSheet("background-color: red;")  # Change background color to red
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)  # Remove layout margins
+
+        # Button for recently accessed courses
+        self.recent_access_button = QPushButton("Recently Accessed Courses")
+        self.recent_access_button.setFont(QFont("Arial", 16))
+        self.recent_access_button.setStyleSheet("background-color: #3498db; color: #ffffff; border-radius: 10px; padding: 15px;")
+        self.recent_access_button.clicked.connect(self.open_recent_access)
+        layout.addWidget(self.recent_access_button)
+
+        # Menu button
+        self.menu_button = QPushButton("Menu")
+        self.menu_button.setFont(QFont("Arial", 16))
+        self.menu_button.setStyleSheet("background-color: #3498db; color: #ffffff; border-radius: 10px; padding: 15px;")
+        self.menu_button.setMenu(self.create_menu())
+        layout.addWidget(self.menu_button, alignment=Qt.AlignBottom | Qt.AlignHCenter)  # Align to bottom center
+
+        self.setLayout(layout)
+
+    def create_menu(self):
+        menu = QMenu(self)
+
+        # Actions for the menu
+        courses_action = QAction("Courses", self)
+        courses_action.triggered.connect(self.open_courses)
+        menu.addAction(courses_action)
+
+        completed_courses_action = QAction("Completed Courses", self)
+        completed_courses_action.triggered.connect(self.view_completed_courses)
+        menu.addAction(completed_courses_action)
+
+        level_action = QAction("Board Level or Competitive Level", self)
+        level_action.triggered.connect(self.choose_level)
+        menu.addAction(level_action)
+
+        mock_test_action = QAction("Mock Tests", self)
+        mock_test_action.triggered.connect(self.take_mock_tests)
+        menu.addAction(mock_test_action)
+
+        pay_action = QAction("Pay", self)
+        pay_action.triggered.connect(self.pay)
+        menu.addAction(pay_action)
+
+        return menu
+
+    def open_courses(self):
+        courses_dialog = QDialog(self)
+        courses_dialog.setWindowTitle("Courses to Learn")
+        courses_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display a big list of courses
+        courses_label = QLabel("List of Courses:")
+        courses_dialog_layout = QVBoxLayout()
+        courses_dialog_layout.addWidget(courses_label)
+
+        # Example courses list
+        courses_list = ["Mathematics", "Science", "History", "Literature", "Computer Science", "Art", "Music"]
+        for course in courses_list:
+            courses_dialog_layout.addWidget(QLabel(course))
+
+        courses_dialog.setLayout(courses_dialog_layout)
+        courses_dialog.exec_()
+
+    def view_completed_courses(self):
+        completed_dialog = QDialog(self)
+        completed_dialog.setWindowTitle("Completed Courses")
+        completed_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display completed courses of the student
+        completed_label = QLabel("Completed Courses:")
+        completed_dialog_layout = QVBoxLayout()
+        completed_dialog_layout.addWidget(completed_label)
+
+        # Example completed courses list
+        completed_courses_list = ["Mathematics", "Science", "Literature"]
+        for course in completed_courses_list:
+            completed_dialog_layout.addWidget(QLabel(course))
+
+        completed_dialog.setLayout(completed_dialog_layout)
+        completed_dialog.exec_()
+
+    def choose_level(self):
+        level_dialog = QDialog(self)
+        level_dialog.setWindowTitle("Choose Level")
+        level_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display options for board level or competitive level
+        level_label = QLabel("Choose Board Level or Competitive Level:")
+        level_dialog_layout = QVBoxLayout()
+        level_dialog_layout.addWidget(level_label)
+
+        # Example options
+        board_level_button = QPushButton("Board Level")
+        competitive_level_button = QPushButton("Competitive Level")
+        level_dialog_layout.addWidget(board_level_button)
+        level_dialog_layout.addWidget(competitive_level_button)
+
+        level_dialog.setLayout(level_dialog_layout)
+        level_dialog.exec_()
+
+    def take_mock_tests(self):
+        mock_test_dialog = QDialog(self)
+        mock_test_dialog.setWindowTitle("Mock Tests")
+        mock_test_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display options for mock tests
+        mock_test_label = QLabel("Choose Mock Test Level:")
+        mock_test_dialog_layout = QVBoxLayout()
+        mock_test_dialog_layout.addWidget(mock_test_label)
+
+        # Example options
+        level_1_button = QPushButton("Level 1")
+        level_2_button = QPushButton("Level 2")
+        level_3_button = QPushButton("Level 3")
+        mock_test_dialog_layout.addWidget(level_1_button)
+        mock_test_dialog_layout.addWidget(level_2_button)
+        mock_test_dialog_layout.addWidget(level_3_button)
+
+        mock_test_dialog.setLayout(mock_test_dialog_layout)
+        mock_test_dialog.exec_()
+
+    def pay(self):
+        # Function to handle payment process
+        print("Payment Successful!")
+
+    def open_recent_access(self):
+        recent_access_dialog = QDialog(self)
+        recent_access_dialog.setWindowTitle("Recently Accessed Courses")
+        recent_access_dialog.setStyleSheet("background-color: #ffffff; color: #333333; font-size: 16px;")
+
+        # Display recently accessed courses
+        recent_access_label = QLabel("Recently Accessed Courses:")
+        recent_access_dialog_layout = QVBoxLayout()
+        recent_access_dialog_layout.addWidget(recent_access_label)
+
+        # Example list of recently accessed courses
+        recent_access_list = ["Art", "Music", "Computer Science"]
+        for course in recent_access_list:
+            recent_access_dialog_layout.addWidget(QLabel(course))
+
+        recent_access_dialog.setLayout(recent_access_dialog_layout)
+        recent_access_dialog.exec_()
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.resize(400, 600)  # Adjust window size
+    window.show()
+    sys.exit(app.exec_())
