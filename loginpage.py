@@ -1,72 +1,49 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QLineEdit, QWidget, QSizePolicy, QPushButton
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QLabel, QGraphicsBlurEffect, QWidget, QSpacerItem, QSizePolicy, QLineEdit
+from PyQt5.QtGui import QPixmap, QImage, QPalette, QPainter, QFont, QColor, QBrush
+from PyQt5.QtCore import Qt, QSize
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Standardized Education System: SES")
-        self.central_widget = QWidget()  # Central widget to hold layout
-        self.setCentralWidget(self.central_widget)
-        self.layout = QGridLayout(self.central_widget)  # Grid layout
-        self.create_fields()
-        self.create_submit_button()
+def create_login_page():
+    page = QWidget()
 
-        # Start timer to update font size per frame
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_font_size)
-        self.timer.start(16)  # Update approximately every 16 milliseconds (close to 60 frames per second)
+    # Set background image
+    background_image = QImage("pic.jpg")
+    palette = QPalette()
+    brush = QBrush(background_image)
+    palette.setBrush(QPalette.Background, brush)
+    page.setAutoFillBackground(True)
+    page.setPalette(palette)
 
-    def create_fields(self):
-        # Creating username and password fields
-        self.username_field = QLineEdit()
-        self.username_field.setPlaceholderText("Username")
-        self.password_field = QLineEdit()
-        self.password_field.setPlaceholderText("Password")
-        self.password_field.setEchoMode(QLineEdit.Password)
+    layout = QVBoxLayout()
 
-        # Setting fields to expand horizontally
-        self.username_field.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.password_field.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+    # Username Label and Input
+    username_label = QLabel("Username:")
+    username_label.setStyleSheet("color: white; font-size: 20px;")
+    layout.addWidget(username_label)
+    username_input = QLineEdit()
+    username_input.setStyleSheet("background-color: rgba(255, 255, 255, 0.3); color: white; font-size: 16px; border-radius: 5px; padding: 10px;")
+    layout.addWidget(username_input)
 
-        # Adding fields to layout
-        self.layout.addWidget(self.username_field, 1, 1)  # Row 1, Column 1
-        self.layout.addWidget(self.password_field, 2, 1)  # Row 2, Column 1
+    # Password Label and Input
+    password_label = QLabel("Password:")
+    password_label.setStyleSheet("color: white; font-size: 20px;")
+    layout.addWidget(password_label)
+    password_input = QLineEdit()
+    password_input.setEchoMode(QLineEdit.Password)
+    password_input.setStyleSheet("background-color: rgba(255, 255, 255, 0.3); color: white; font-size: 16px; border-radius: 5px; padding: 10px;")
+    layout.addWidget(password_input)
 
-        # Set row and column stretch
-        self.layout.setColumnStretch(0, 1)  # Stretch column 0
-        self.layout.setColumnStretch(3, 1)  # Stretch column 3
-        self.layout.setRowStretch(0, 1)  # Stretch row 0
-        self.layout.setRowStretch(3, 1)  # Stretch row 3
+    # Spacer
+    layout.addItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-    def create_submit_button(self):
-        # Creating submit button
-        self.submit_button = QPushButton("Submit")
+    # Login Button
+    login_button = QPushButton("Login")
+    login_button.setStyleSheet("color: white; background-color: #007bff; border: none; padding: 15px 30px; border-radius: 10px; font-size: 18px;")
+    layout.addWidget(login_button)
+    layout.setAlignment(login_button, Qt.AlignCenter)
 
-        # Connecting button click event to submit function
-        self.submit_button.clicked.connect(self.submit_form)
+    # Set layout margins
+    layout.setContentsMargins(100, 200, 100, 200)
 
-        # Adding button to layout
-        self.layout.addWidget(self.submit_button, 3, 1)  # Row 3, Column 1
+    page.setLayout(layout)
 
-    def update_font_size(self):
-        # Dynamically adjust font size based on field size ratio
-        font = self.username_field.font()
-        font_size = min(self.username_field.size().width(), self.username_field.size().height()) // 15
-        font.setPointSize(font_size)
-        self.username_field.setFont(font)
-        self.password_field.setFont(font)
-
-    def submit_form(self):
-        # Fetch entered username and password
-        username = self.username_field.text()
-        password = self.password_field.text()
-        # Do something with the submitted data, like sending it to a server or performing authentication
-        print("Username:", username)
-        print("Password:", password)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+    return page
