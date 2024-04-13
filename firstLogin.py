@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QLabel, QGraphicsBlurEffect, QGridLayout, QWidget, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtCore import Qt
 
@@ -8,10 +8,18 @@ class BackgroundWidget(QWidget):
         super().__init__()
         self.image_path = image_path
         self.pixmap = QPixmap(self.image_path)
+        
+        self.blur_effect = QGraphicsBlurEffect()
+        self.blur_effect.setBlurRadius(10)  # Set the blur radius (adjust as needed)
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.drawPixmap(self.rect(), self.pixmap)
+        self.background_label = QLabel(self)
+        self.background_label.setPixmap(self.pixmap)
+        self.background_label.setScaledContents(True)
+
+        self.background_label.setGraphicsEffect(self.blur_effect)
+
+    def resizeEvent(self, event):
+        self.background_label.setGeometry(0, 0, self.width(), self.height())
 
 class MainWidget(QMainWindow):
     def __init__(self):
@@ -23,8 +31,12 @@ class MainWidget(QMainWindow):
         self.setGeometry(100, 100, 500, 800)
 
         self.background = BackgroundWidget("pic.jpg")
+        self.setCentralWidget(self.background)  # Set background as central widget
+
         self.label = QLabel("Main Screen")
         self.label.setAlignment(Qt.AlignCenter)
+
+        self.grid_layout = QVBoxLayout()
 
         self.button1 = QPushButton('Go to Screen 1')
         self.button1.clicked.connect(self.screen1)
@@ -32,17 +44,13 @@ class MainWidget(QMainWindow):
         self.button2 = QPushButton('Go to Screen 2')
         self.button2.clicked.connect(self.screen2)
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.label)
-        layout.addWidget(self.button1)
-        layout.addWidget(self.button2)
+        spacer_item = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.grid_layout.addWidget(self.label)
+        self.grid_layout.addItem(spacer_item)
+        self.grid_layout.addWidget(self.button1, alignment=Qt.AlignCenter)
+        self.grid_layout.addWidget(self.button2, alignment=Qt.AlignCenter)
 
-        central_widget = QWidget()
-        central_layout = QVBoxLayout()
-        central_layout.addWidget(self.background)
-        central_layout.addLayout(layout)
-        central_widget.setLayout(central_layout)
-        self.setCentralWidget(central_widget)  # Set the central widget of the main window
+        self.background.setLayout(self.grid_layout)  # Add grid layout to the background
 
     def screen1(self):
         self.label.setText("You're on Screen 1")
