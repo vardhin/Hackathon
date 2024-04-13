@@ -5,8 +5,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QStackedLayout
 
 class BackgroundWidget(QWidget):
-    def _init_(self, image_path):
-        super()._init_()
+    def __init__(self, image_path):
+        super().__init__()
         self.image_path = image_path
         self.pixmap = QPixmap(self.image_path)
         
@@ -23,18 +23,23 @@ class BackgroundWidget(QWidget):
 
 
 class MyWindow(QMainWindow):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.init_ui()
 
     def init_ui(self):
         self.setWindowTitle('SES')
+        self.set_background_image("pic.jpg")
         self.setGeometry(100, 100, 500, 800)
         
         self.stacked_layout = QStackedLayout()
         self.central_widget = QWidget()
         self.central_widget.setLayout(self.stacked_layout)
         self.setCentralWidget(self.central_widget)
+    
+    def set_background_image(self, image_path):
+        background_widget = BackgroundWidget(image_path)
+        self.setCentralWidget(background_widget)
 
     def switch_to_page(self, page):
         index = self.stacked_layout.addWidget(page)
@@ -42,11 +47,4 @@ class MyWindow(QMainWindow):
 
     def remove_current_page(self):
         if self.stacked_layout.count() > 0:
-            self.stacked_layout.removeWidget(self.stacked_layout.currentWidget())
-
-
-if _name_ == '_main_':
-    app = QApplication(sys.argv)
-    main_window = MyWindow()
-    main_window.show()
-    sys.exit(app.exec_())
+            self.stacked_layout.removeWidget(self.stacked_layout.currentWidget()
